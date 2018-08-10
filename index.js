@@ -1,13 +1,13 @@
 const startupDebugger=require('debug')('app:startup');
 const dbDebugger=require('debug')('app:db');
+const mongoose=require('mongoose');
 const config=require('config');
 const helmet=require('helmet');
 const courses=require('./routes/courses');
 const homes=require('./routes/home');
 const morgan=require('morgan');
-const Joi=require('joi');
 const logger=require('./middleware/logger');
-const authentication=require('./authentication');
+const authentication=require('./middleware/authentication');
 const express=require('express');
 const app=express();
 
@@ -20,6 +20,9 @@ const app=express();
 // console.log('Mail Server:' +config.get('mail.host'));
 // console.log('Mail Password:' +config.get('mail.password'));
 
+mongoose.connect('mongodb://localhost/expressdemo')
+    .then(()=>console.log('Connected to MongoDB...'))
+    .catch(err=> console.log('Could not connect to MongoDB.....'));
 
 app.set('view engine','pug');
 app.set('views','./views')
@@ -39,7 +42,7 @@ if(app.get('env') === 'development'){
 }
 
 //DB  work
-dbDebugger('Connected to the database');
+// dbDebugger('Connected to the database');
 
 
 //PORT 
