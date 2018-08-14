@@ -3,8 +3,15 @@ const dbDebugger=require('debug')('app:db');
 const mongoose=require('mongoose');
 const config=require('config');
 const helmet=require('helmet');
+const Joi = require('joi');
+Joi.objectId=require('joi-objectid')(Joi);
+
 const courses=require('./routes/courses');
 const homes=require('./routes/home');
+const genres = require('./routes/genres');
+const customers = require('./routes/customers');
+const movies = require('./routes/movies');
+const rentals = require('./routes/rentals');
 const morgan=require('morgan');
 const logger=require('./middleware/logger');
 const authentication=require('./middleware/authentication');
@@ -26,14 +33,20 @@ mongoose.connect('mongodb://localhost/expressdemo')
 
 app.set('view engine','pug');
 app.set('views','./views')
+
+
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static('public'));
 app.use(helmet());
 app.use('/api/courses',courses);
 app.use('/',homes);
-// app.use(logger);
-// app.use(authentication);
+app.use('/api/genres', genres);
+app.use('/api/customers', customers);
+app.use('/api/movies', movies);
+app.use('/api/rentals', rentals);
+
+
 
 
 if(app.get('env') === 'development'){

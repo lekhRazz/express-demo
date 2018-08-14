@@ -45,10 +45,7 @@ router.put('/:id', async (req, res) => {
     if (!course) return res.status(404).send('The course with the given ID was not found');
 
     res.send(course);
-   
 });
-
-
 
 router.delete('/:id', async (req, res) => {
     //Look up the course
@@ -56,10 +53,8 @@ router.delete('/:id', async (req, res) => {
     const course = await Course.findByIdAndRemove(req.params.id);
 
     if (!course) return res.status(404).send('The course with the given ID was not found');
-
     //Return the same course
     res.send(course);
-
 });
 
 module.exports = router;
