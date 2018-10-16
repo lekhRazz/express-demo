@@ -18,7 +18,6 @@ const auth=require('./routes/auth');
 
 const morgan=require('morgan');
 const logger=require('./middleware/logger');
-const authentication=require('./middleware/auth');
 const express=require('express');
 const app=express();
 
