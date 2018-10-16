@@ -1,20 +1,24 @@
 const startupDebugger=require('debug')('app:startup');
+const config=require('config');
 const dbDebugger=require('debug')('app:db');
 const mongoose=require('mongoose');
-const config=require('config');
 const helmet=require('helmet');
 const Joi = require('joi');
 Joi.objectId=require('joi-objectid')(Joi);
 
+//Import routers
 const courses=require('./routes/courses');
 const homes=require('./routes/home');
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
 const movies = require('./routes/movies');
 const rentals = require('./routes/rentals');
+const users=require('./routes/users');
+const auth=require('./routes/auth');
+
 const morgan=require('morgan');
 const logger=require('./middleware/logger');
-const authentication=require('./middleware/authentication');
+const authentication=require('./middleware/auth');
 const express=require('express');
 const app=express();
 
@@ -45,7 +49,8 @@ app.use('/api/genres', genres);
 app.use('/api/customers', customers);
 app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
-
+app.use('/api/users',users);
+app.use('/api/auth',auth);
 
 
 
@@ -57,6 +62,10 @@ if(app.get('env') === 'development'){
 //DB  work
 // dbDebugger('Connected to the database');
 
+if(!config.get('jwtPrivateKey')){
+    console.log('FATAL ERROR:jwtPrivateKey is not defined.');
+    process.exit(1);
+}
 
 //PORT 
 const port=process.env.PORT || 3000;
