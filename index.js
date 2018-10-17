@@ -1,4 +1,7 @@
+const error=require('./middleware/error');
 const startupDebugger=require('debug')('app:startup');
+require('express-async-errors');
+const winston=require('winston');
 const config=require('config');
 const dbDebugger=require('debug')('app:db');
 const mongoose=require('mongoose');
@@ -21,6 +24,8 @@ const logger=require('./middleware/logger');
 const express=require('express');
 const app=express();
 
+
+winston.add(winston.transports.File,{ filename: 'logfile.log'});
 // console.log(`NODE_ENV:${process.env.NODE_ENV}`);
 // console.log(`app:${app.get('env')}`);
 
@@ -50,6 +55,9 @@ app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users',users);
 app.use('/api/auth',auth);
+
+//error handler middleware
+app.use(error);
 
 
 
